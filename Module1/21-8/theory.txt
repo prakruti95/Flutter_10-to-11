@@ -1,0 +1,22 @@
+HomePage:
+
+Personal Details:
+Aadhar Card - Front,back
+Linkedin ID
+Insta ID
+
+Education Details:If there is any change
+
+Github Account Create
+
+1. Create Repo
+2. Create File
+3. Create Folder
+4. Upload File
+5. Upload File Inside Folder
+
+
+
+
+
+
