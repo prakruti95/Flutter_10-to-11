@@ -1,0 +1,71 @@
+1.for loop:
+void main()
+{
+   
+   int i;
+  
+   for(i=1;i<=10;i++)
+   {
+       print(i);
+   }
+}
+
+2.while loop:
+void main()
+{
+   
+   int i=1;
+  
+  while(i<=10)
+  {
+      print(i);
+      i++;
+  }
+}
+
+3.do-while loop:
+void main()
+{
+   
+   int i=1;
+  
+  do
+  {
+      print(i);
+      i++; 
+  }
+  
+  while(i<=10);
+    
+}
+4. for in loop:
+void main()
+{
+    
+    List marks = [23,34,56,45,"a","b"];
+    
+    for(var data in marks)
+    {
+        print(data);
+    }
+ 
+ 
+    
+}
+5.for-each loop:
+void main()
+{
+    
+   var Tops = ["a","b","c",1];
+
+    
+   Tops.forEach
+   (
+        (element)
+        {
+             print(element);
+        }
+  );
+ 
+    
+}
