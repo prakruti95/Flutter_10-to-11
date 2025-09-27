@@ -1,0 +1,17 @@
+Create an app with the name of TOPS TECHNOLOGIES
+In same app add 
+
+1)
+splash screen with tops technologies logo on center
+after 5 seconds it should be switch on next screen
+
+2)
+In Second Page Create a Login Page with all validations if user logged
+in succesfully it should be show scaffold msg for login success and 
+login fail
+
+3)
+after login screen it should be switch on dashboard screen where a name 
+should be there which user is logged in 
+
+
