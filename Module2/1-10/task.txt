@@ -1,0 +1,7 @@
+1. Splash Screen [Timer,Connectivity]
+2. Login Screen[Validations]
+3. Dashboard Screen
+4. Exit
+Alert ->  are you sure you want to exit? yes/no
+
+
