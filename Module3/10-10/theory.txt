@@ -1,0 +1,18 @@
+Navigator.push
+arguments with push
+Navigator.pushreplacement
+Navigator.pop
+Navigator.pushNamed(context, '/second');
+Navigator.pushNamed(
+                  context,
+                  SecondScreen.routeName,
+                  arguments: Arguments(
+                        'Extract Arguments Screen',
+                        'Extracted in the build method.',
+                  ),
+            );
+
+
+
+
+
