@@ -1,0 +1,23 @@
+Task:
+login
+Signup
+dashboard screen[sharedprefrence]
+-> floating action button -> add
+
+Add Screen
+
+Image
+Company Name
+Model name
+Price
+Discount
+Final Price
+
+
+View Screen -> search
+Edit -> Delete
+
+
+
+
+
