@@ -1,0 +1,36 @@
+Database: details
+
+Table : rahul_user
+Table2 : rahul_products
+SQL File
+
+user:
+id
+name
+email
+mobile
+password
+
+products
+id
+p_name
+p_price
+p_des
+
+connect.php
+
+signup.php-user
+signin.php-user
+
+insert.php-products
+view.php-products
+update.php-products
+delete.php-products
+
+
+index.php
+echo "<h2>Rahul API</h2>";
+echo "<ul>";
+echo "<li><a href='rahul/connect.php'>Connection</a></li>";
+echo "<li><a href='rahul/signup.php'>Signup</a></li>";
+echo "</ul>";
