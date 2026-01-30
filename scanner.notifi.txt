@@ -1,0 +1,291 @@
+-> https://pub.dev/packages/qr_code_scanner_plus/example
+
+-> https://github.com/Snehasis4321/push_notifications_firebase_flutter/tree/main
+
+notifi:
+Perfect — here’s a **FULL, COPY-PASTE-READY, STEP-BY-STEP Flutter FCM implementation** with **complete source code**.
+This is the **minimum production-ready setup** that actually works on **Android & iOS**.
+
+I’ll give you:
+
+* Project setup
+* Platform config
+* **ONE full `main.dart`**
+* How to test
+
+No fluff. No missing pieces.
+
+---
+
+# 🔔 Flutter Push Notifications (Firebase FCM)
+
+## FULL STEP-BY-STEP + FULL SOURCE CODE
+
+---
+
+## ✅ STEP 1: Create Firebase Project
+
+1. Go to **Firebase Console**
+2. Create project
+3. Add app:
+
+   * Android → package name (e.g. `com.example.fcmapp`)
+   * iOS → bundle id
+4. Download:
+
+   * `google-services.json` → `android/app/`
+   * `GoogleService-Info.plist` → `ios/Runner/`
+
+---
+
+## ✅ STEP 2: Flutter Dependencies
+
+### `pubspec.yaml`
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+
+  firebase_core: ^2.24.2
+  firebase_messaging: ^14.7.10
+  flutter_local_notifications: ^16.3.0
+```
+
+```bash
+flutter pub get
+```
+
+---
+
+## ✅ STEP 3: Android Setup
+
+### `android/build.gradle`
+
+```gradle
+buildscript {
+    dependencies {
+        classpath 'com.google.gms:google-services:4.4.0'
+    }
+}
+```
+
+### `android/app/build.gradle`
+
+```gradle
+apply plugin: 'com.google.gms.google-services'
+```
+
+### `AndroidManifest.xml`
+
+```xml
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+<application>
+    <meta-data
+        android:name="com.google.firebase.messaging.default_notification_channel_id"
+        android:value="high_importance_channel"/>
+</application>
+```
+
+---
+
+## ✅ STEP 4: iOS Setup
+
+### Enable in Xcode:
+
+* **Push Notifications**
+* **Background Modes → Remote notifications**
+
+### `ios/Runner/AppDelegate.swift`
+
+```swift
+import UIKit
+import Flutter
+import Firebase
+
+@UIApplicationMain
+@objc class AppDelegate: FlutterAppDelegate {
+  override func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+  ) -> Bool {
+    FirebaseApp.configure()
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+}
+```
+
+---
+
+## ✅ STEP 5: FULL `main.dart` (COMPLETE SOURCE CODE)
+
+🔥 **Copy everything below into `lib/main.dart`**
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+/// BACKGROUND HANDLER
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  debugPrint('Background message: ${message.messageId}');
+}
+
+/// LOCAL NOTIFICATIONS
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String? fcmToken;
+
+  @override
+  void initState() {
+    super.initState();
+    requestPermission();
+    initLocalNotifications();
+    getToken();
+    listenToMessages();
+  }
+
+  /// REQUEST PERMISSION
+  Future<void> requestPermission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    debugPrint('Permission: ${settings.authorizationStatus}');
+  }
+
+  /// GET TOKEN
+  Future<void> getToken() async {
+    fcmToken = await FirebaseMessaging.instance.getToken();
+    debugPrint('FCM TOKEN: $fcmToken');
+    setState(() {});
+  }
+
+  /// LOCAL NOTIFICATION INIT
+  void initLocalNotifications() {
+    const AndroidInitializationSettings androidSettings =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    const InitializationSettings settings =
+        InitializationSettings(android: androidSettings);
+
+    flutterLocalNotificationsPlugin.initialize(settings);
+  }
+
+  /// SHOW LOCAL NOTIFICATION
+  void showNotification(RemoteMessage message) {
+    const AndroidNotificationDetails androidDetails =
+        AndroidNotificationDetails(
+      'high_importance_channel',
+      'High Importance Notifications',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+
+    const NotificationDetails notificationDetails =
+        NotificationDetails(android: androidDetails);
+
+    flutterLocalNotificationsPlugin.show(
+      0,
+      message.notification?.title ?? 'No Title',
+      message.notification?.body ?? 'No Body',
+      notificationDetails,
+    );
+  }
+
+  /// LISTEN TO MESSAGES
+  void listenToMessages() {
+    // Foreground
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      debugPrint('Foreground message received');
+      showNotification(message);
+    });
+
+    // When app opened from notification
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      debugPrint('Notification clicked');
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('FCM Push Notifications')),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'FCM Token:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            SelectableText(fcmToken ?? 'Loading...'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+---
+
+## ✅ STEP 6: Run App
+
+```bash
+flutter run
+```
+
+Check console → copy **FCM Token**
+
+---
+
+## ✅ STEP 7: Send Test Notification
+
+### Firebase Console
+
+1. Cloud Messaging
+2. Send test message
+3. Paste FCM token
+4. Send 🚀
+
+
